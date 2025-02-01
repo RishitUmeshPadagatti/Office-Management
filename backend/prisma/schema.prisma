@@ -1,0 +1,86 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Office {
+  id                          Int                          @id @default(autoincrement())
+  name                        String
+  objectUrl                   String?
+  employees                   Employee[]                   @relation("OfficeEmployees")
+
+  regional_manager_id         Int?                         @unique
+  regional_manager            Employee?                    @relation("RegionalManager", fields: [regional_manager_id], references: [id], onDelete: Cascade)
+  asst_regional_manager_id    Int?                         @unique
+  asst_regional_manager       Employee?                    @relation("AsstRegionalManager", fields: [asst_regional_manager_id], references: [id], onDelete: Cascade)
+
+  floors                      Floor[]                      @relation("Floors")
+}
+
+model Floor {
+  id                          Int                          @id @default(autoincrement())
+  desks                       Desk[]
+  cabins                      Cabin[]
+
+  officeId                    Int
+  office                      Office                        @relation("Floors", fields: [officeId], references: [id])
+}
+
+model Desk {
+  id                          Int                          @id @default(autoincrement())
+  floorId                     Int
+  floor                       Floor                        @relation(fields: [floorId], references: [id])
+  occupiedById                Int?                         @unique
+  occupiedBy                  Employee?                    @relation("DeskOccupants", fields: [occupiedById], references: [id])
+}
+
+model Cabin {
+  id                          Int                          @id @default(autoincrement())
+  floorId                     Int
+  floor                       Floor                        @relation(fields: [floorId], references: [id])
+  occupiedById                Int?                         @unique
+  occupiedBy                  Employee?                    @relation("CabinOccupants", fields: [occupiedById], references: [id])
+}
+
+enum WorkModelOption {
+  in_office
+  hybrid
+  remote
+}
+
+model Employee {
+  id                          Int                          @id @default(autoincrement())
+  name                        String
+  email                       String                        @unique
+  phoneNumber                 BigInt                       // @unique
+  password                    String
+  objectUrl                   String?
+  workModel					  WorkModelOption
+
+  roleId                      Int?
+  role                        Role?                        @relation("Role", fields: [roleId], references: [id])
+  officeId                    Int?
+  office                      Office?                      @relation("OfficeEmployees", fields: [officeId], references: [id], onDelete: Cascade)
+
+  managed_office              Office?                      @relation("RegionalManager")
+  assisted_office             Office?                      @relation("AsstRegionalManager")
+
+  desk_occupied               Desk?                        @relation("DeskOccupants")
+  cabin_occupied              Cabin?                       @relation("CabinOccupants")
+}
+
+model Role {
+  id                          Int                          @id @default(autoincrement())
+  name                        String
+  employees                   Employee[]                   @relation("Role")
+}
