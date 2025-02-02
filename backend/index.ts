@@ -4,6 +4,8 @@ import adminRouter from "./router/adminRouter"
 import authRouter from "./router/authRouter"
 import uploadRouter from "./router/upload"
 import generalRouter from "./router/generalRouter"
+import testRouter from "./router/testRouter"
+import dashboardRouter from "./router/dashboardRouter"
 import {adminMiddleware} from "./middleware/adminMiddleware"
 import cors from "cors"
 
@@ -22,6 +24,8 @@ app.use("/admin",adminMiddleware, adminRouter)
 app.use("/auth", authRouter)
 app.use("/upload", uploadRouter)
 app.use("/general", generalRouter)
+app.use("/test", testRouter)
+app.use("/dashboard", dashboardRouter)
 
 app.listen(port, () => {
     console.log(`Server is running at port http://localhost:${port}`);

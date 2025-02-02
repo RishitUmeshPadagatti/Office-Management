@@ -23,11 +23,7 @@ export const searchAllEmployees = async (req: Request, res: Response) => {
                 email: true,
                 phoneNumber: true,
                 objectUrl: true,
-                role: {
-                    select: {
-                        name: true
-                    }
-                },
+                role: true,
                 office: {
                     select: {
                         name: true
@@ -41,4 +37,14 @@ export const searchAllEmployees = async (req: Request, res: Response) => {
         console.error("Error searching employees:", error);
         res.status(ResponseStatus.internalServerError).json({ error: "Internal server error", success: false });
     }
+}
+
+export const allEmployees = async (req: Request, res: Response) => {
+    try {
+        const employees = await prisma.employee.findMany();
+        res.status(200).json(formatJsonToExcludePasswordAndBigint(employees));
+      } catch (error) {
+        console.error(error)
+        res.status(500).json({ error: 'Failed to fetch employees' });
+      }
 }

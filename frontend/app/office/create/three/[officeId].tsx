@@ -1,4 +1,4 @@
-import { employeeToRegionalManager, searchAllEmployee } from "@/utils/addresses";
+import { employeeToAsstRegionalManager, searchAllEmployee } from "@/utils/addresses";
 import { getValue } from "@/utils/auth";
 import { customSimpleAlert } from "@/utils/functions";
 import { Ionicons } from "@expo/vector-icons";
@@ -18,7 +18,7 @@ type Employee = {
     office: { name: string } | undefined;
 };
 
-export default function Two() {
+export default function Three(){
     const { officeId } = useLocalSearchParams()
 
     const [query, setQuery] = useState("");
@@ -54,7 +54,7 @@ export default function Two() {
 
     const onSubmit = async () => {
         try {
-            const result = await axios.post(employeeToRegionalManager, {
+            const result = await axios.post(employeeToAsstRegionalManager, {
                 employeeId: selectedEmployeeId,
                 officeId: officeId
             }, {
@@ -63,7 +63,7 @@ export default function Two() {
                 }
             })
             if (result.data.success == true){
-                router.push(`/office/create/three/${4}`)
+                router.push(`/office/create/three/${4}`) // TODO
             } else{
                 customSimpleAlert("Something went wrong")
             }
@@ -77,7 +77,7 @@ export default function Two() {
         <View className="flex-1">
             <SafeAreaView className="flex-1">
                 <View className="mt-2.5 mx-6">
-                    <Text className="text-xl font-bold text-gray-900 mb-5 cursor-pointer">Enter Regional Manager</Text>
+                    <Text className="text-xl font-bold text-gray-900 mb-5 cursor-pointer">Enter Asst Regional Manager</Text>
 
                     <TextInput
                         className="w-full border border-gray-300 text-gray-500 px-5 py-3 rounded-lg"

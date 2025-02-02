@@ -25,10 +25,13 @@ model Office {
   asst_regional_manager       Employee?                    @relation("AsstRegionalManager", fields: [asst_regional_manager_id], references: [id], onDelete: Cascade)
 
   floors                      Floor[]                      @relation("Floors")
+
+  
 }
 
 model Floor {
   id                          Int                          @id @default(autoincrement())
+  name                        String
   desks                       Desk[]
   cabins                      Cabin[]
 
@@ -58,6 +61,19 @@ enum WorkModelOption {
   remote
 }
 
+enum RoleOptions {
+  REGIONAL_MANAGER
+  ASST_REGIONAL_MANAGER
+  SALES_HEAD
+  SALES_ASSOCIATE
+  FINANCE_HEAD
+  FINANCE_ANALYST
+  SECURITY_OFFICER
+  JANITOR
+  RECEPTIONIST
+  UNASSIGNED
+}
+
 model Employee {
   id                          Int                          @id @default(autoincrement())
   name                        String
@@ -65,10 +81,9 @@ model Employee {
   phoneNumber                 BigInt                       // @unique
   password                    String
   objectUrl                   String?
-  workModel					  WorkModelOption
+  workModel					          WorkModelOption
 
-  roleId                      Int?
-  role                        Role?                        @relation("Role", fields: [roleId], references: [id])
+  role                        RoleOptions
   officeId                    Int?
   office                      Office?                      @relation("OfficeEmployees", fields: [officeId], references: [id], onDelete: Cascade)
 
@@ -77,10 +92,4 @@ model Employee {
 
   desk_occupied               Desk?                        @relation("DeskOccupants")
   cabin_occupied              Cabin?                       @relation("CabinOccupants")
-}
-
-model Role {
-  id                          Int                          @id @default(autoincrement())
-  name                        String
-  employees                   Employee[]                   @relation("Role")
 }

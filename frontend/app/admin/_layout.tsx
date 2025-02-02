@@ -39,16 +39,6 @@ export default function AdminLayout() {
             />
 
             <Tabs.Screen 
-                name="checkIn" 
-                options={{ 
-                    title: "Check In",
-                    tabBarIcon: ({ color }) => (
-                        <Ionicons name="qr-code" size={logoSize} color={color} />
-                    )
-                }} 
-            />
-
-            <Tabs.Screen 
                 name="add" 
                 options={{ 
                     title: "Add",

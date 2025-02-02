@@ -6,6 +6,7 @@ import { avatarUploadAddress, createEmployeeAddress } from "@/utils/addresses";
 import { customSimpleAlert } from "@/utils/functions";
 import { getValue } from "@/utils/auth";
 import { Picker } from '@react-native-picker/picker';
+import { RoleOptions } from "@/utils/values";
 
 export default function Add() {
     const defaultAvatarLink = "https://img.icons8.com/ios-filled/100/CCCCCC/user.png"
@@ -52,6 +53,7 @@ export default function Add() {
     const [inputPhone, setInputPhone] = useState("")
     const [inputPassword, setInputPassword] = useState("")
     const [workModel, setWorkModel] = useState<string>('in_office');
+    const [selectedRole, setSelectedRole] = useState<RoleOptions>()
 
     const handleSubmit = async () => {
         if (isSettingImage == false) {
@@ -62,7 +64,8 @@ export default function Add() {
                     phoneNumber: inputPhone,
                     password: inputPassword,
                     objectUrl: image,
-                    workModel: workModel
+                    workModel: workModel,
+                    role: selectedRole
                 }, {
                     headers: {
                         "Authorization": await getValue("UserToken")
@@ -107,7 +110,7 @@ export default function Add() {
                         Select Work Model
                     </Text>
                     <Picker
-                        selectedValue={workModel}                    
+                        selectedValue={workModel}
                         onValueChange={(itemValue) => setWorkModel(itemValue)}
                     >
                         <Picker.Item label="In Office" value="in_office" />
@@ -115,7 +118,21 @@ export default function Add() {
                         <Picker.Item label="Remote" value="remote" />
 
                     </Picker>
-                    
+                </View>
+
+                <View className="my-2.5 mx-6">
+                    <Text className="text-lg font-bold text-gray-900 mb-2 cursor-pointer">
+                        Select Role
+                    </Text>
+                    <Picker
+                        selectedValue={selectedRole}
+                        onValueChange={(itemValue) => setSelectedRole(itemValue)}
+                    >
+                        {Object.entries(RoleOptions).map(([key, value]) => (
+                            <Picker.Item key={key} label={value} value={key} />
+                        ))}
+
+                    </Picker>
                 </View>
 
                 <TouchableOpacity className="bg-black py-3 my-5 mx-6 rounded-lg active:opacity-90" onPress={handleSubmit}>

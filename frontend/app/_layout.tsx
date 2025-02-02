@@ -22,16 +22,12 @@ export default function RootLayout() {
 				console.log("Token not present");
 			}
 		}
-
-		// checkAuth()
+		
 		// logout()
-		// router.push("/admin/add")
-		// router.push("/admin/dashboard")
-		// router.push("/")
-		// router.push("/admin/manage")
-		// router.push("/office/create/one")
-		router.push("/office/create/two/5")
+		checkAuth()
 	}, [])
 
-	return <Stack screenOptions={{ headerShown: false }} />;
+	return (
+		<Stack screenOptions={{ headerShown: false }} />
+	)
 }
